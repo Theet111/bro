@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Commonstage
 
-## Getting Started
+Commonstage is a minimalist concept website that connects event planners with creative talent. It includes an artist directory, individual profiles, a booking request flow, an artist signup flow, and browser-local saved lists. All initial artists are fictional sample data.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). To verify a production build, run `npm run build`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route | Purpose |
+| --- | --- |
+| `/` | Home, featured artists, categories, and overview |
+| `/artists` | Search, filter, and sort the artist directory |
+| `/artists/[id]` | Artist profile, specialties, and pricing |
+| `/booking/[id]` | Event booking request form |
+| `/saved` | Saved artist shortlist |
+| `/requests` | Booking requests saved in this browser |
+| `/for-artists` | Information for artists |
+| `/join` | Create a sample artist profile |
+| `/how-it-works` | Planner flow and demo FAQs |
 
-## Learn More
+## Demo behavior
 
-To learn more about Next.js, take a look at the following resources:
+- Six illustrative artist profiles are hardcoded in `lib/artists.ts`.
+- Search, category, city, and price sorting work in the directory.
+- Favorites, newly created artist profiles, and booking requests are stored in browser `localStorage`.
+- Creating an artist profile opens its own profile page. Optional profile images use a URL supplied in the form; otherwise the profile shows initials.
+- Booking requests appear under **My requests**. They are **not sent to artists**. The site has no accounts, backend, email delivery, or payments.
+- Browser-local data does not sync across devices and can be cleared with browser data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Brand icon
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The custom eight-point stage mark is in `app/icon.svg`. Next.js uses it as the site icon, and a matching inline mark appears in the header and footer. The visual system uses warm white, charcoal, and a single muted terracotta accent.
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```text
+app/             Pages, layout, global styles, and app icon
+components/      Shared navigation, footer, cards, and icons
+lib/artists.ts    Illustrative artist data and types
+lib/demo-store.ts Browser-local demo persistence
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Artist photography uses external Unsplash image URLs and requires an internet connection to appear. The site remains usable without those images.

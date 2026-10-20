@@ -1,0 +1,16 @@
+"use client";
+
+import Link from "next/link";
+import { ArtistCard, ArtistImage } from "../../../components/artist-card";
+import { Icon } from "../../../components/icons";
+import { money } from "../../../lib/artists";
+import { toggleFavorite, useDemoData } from "../../../lib/demo-store";
+
+export function ArtistProfile({ id }: { id: string }) {
+  const { artists, favorites, loaded } = useDemoData();
+  const artist = artists.find((item) => item.id === id);
+  if (!artist) return <main className="container state-page"><div className="eyebrow"><span className="eyebrow-line" /> ARTIST PROFILE</div><h1>{loaded ? "Artist not found." : "Finding the artist…"}</h1><p>{loaded ? "This profile may be on another device. Sample profiles are available in the directory." : "Loading this profile from your browser."}</p><Link className="button button-dark" href="/artists">Browse artists <Icon name="arrow" size={17} /></Link></main>;
+  const related = artists.filter((item) => item.id !== artist.id && item.category === artist.category).slice(0, 2);
+  const saved = favorites.includes(artist.id);
+  return <main><div className="container breadcrumbs"><Link href="/artists">Explore artists</Link><span>/</span><span>{artist.name}</span></div><section className="profile-page container"><div className="profile-page-image"><ArtistImage artist={artist} /></div><div className="profile-page-copy"><div className="eyebrow"><span className="eyebrow-line" /> {artist.category.toUpperCase()}</div><h1>{artist.name}</h1><p className="profile-page-specialty">{artist.specialty}</p><div className="profile-location"><Icon name="pin" size={17} /> Based in {artist.city}</div><p className="profile-page-bio">{artist.bio}</p><div className="profile-tags">{artist.tags.map((tag) => <span key={tag}>{tag}</span>)}</div><div className="profile-page-actions"><Link className="button button-dark" href={`/booking/${artist.id}`}>Request a booking <Icon name="arrow" size={18} /></Link><button className={`outline-action ${saved ? "saved" : ""}`} onClick={() => toggleFavorite(artist.id)} aria-pressed={saved}><Icon name="heart" size={18} /> {saved ? "Saved" : "Save artist"}</button></div><div className="profile-price"><span>Starting from</span><strong>{money(artist.fee)}</strong><small>per event · indicative demo price</small></div></div></section><section className="profile-details container"><div><div className="eyebrow"><span className="eyebrow-line" /> THE EXPERIENCE</div><h2>What they bring<br />to the room.</h2></div><div><p>{artist.bio}</p><p>Share your event date, location, and the atmosphere you have in mind. Your details will be saved as a sample request on this device.</p><Link className="text-link" href={`/booking/${artist.id}`}>Start a request <Icon name="arrow" size={17} /></Link></div></section>{related.length > 0 && <section className="related-section"><div className="container"><div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line" /> MORE TO EXPLORE</div><h2>In a similar spirit.</h2></div><Link className="text-link" href="/artists">All artists <Icon name="arrow" size={17} /></Link></div><div className="artist-grid related-grid">{related.map((item) => <ArtistCard key={item.id} artist={item} />)}</div></div></section>}</main>;
+}
